@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+
+Signal.trap('SIGINT') {
+  puts
+  exit 1
+}
+
+require 'thor'
+require 'everyday_thor_util'
+require 'everyday-plugins'
+
+include EverydayPlugins
+
+Plugins.load_plugins 'epg'
+
+EverydayThorUtil::SubCommandTypes.def_types(:command_ids, :flag, :command, :helper)
+EverydayThorUtil::SubCommandTypes.def_helper(:helper, :print_info)
+
+module Epg
+  class DefaultCommands
+    extend Plugin
+
+    register(:command, id: :path, parent: nil, name: 'path', short_desc: 'path', desc: 'print out the path of the current file') { puts __FILE__ }
+  end
+end
+
+root_command = Class.new(Thor)
+Plugins.get :command, root_command, nil
+
+EverydayThorUtil::SubCommandTypes.add_debugging(root_command, nil, 'debug')
+
+root_command.start(ARGV)
