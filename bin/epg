@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 Signal.trap('SIGINT') {
+  Process.waitall
   puts
   exit 1
 }
@@ -20,7 +21,8 @@ module Epg
   class DefaultCommands
     extend Plugin
 
-    register(:command, id: :path, parent: nil, name: 'path', short_desc: 'path', desc: 'print out the path of the current file') { puts __FILE__ }
+    register :command, id: :path, parent: nil, name: 'path', short_desc: 'path SUBCOMMAND ARGS...', desc: 'print out the path of the file for a module'
+    register(:command, id: :path_base, parent: :path, name: 'base', short_desc: 'base', desc: 'print out the path of the file for the base module') { puts __FILE__ }
   end
 end
 
