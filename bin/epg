@@ -29,6 +29,4 @@ end
 root_command = Class.new(Thor)
 Plugins.get :command, root_command, nil
 
-EverydayThorUtil::SubCommandTypes.add_debugging(root_command, nil, 'debug')
-
 root_command.start(ARGV)
